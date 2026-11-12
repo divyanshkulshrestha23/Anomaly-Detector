@@ -1,0 +1,116 @@
+{
+  "fit_rows": 159491,
+  "validation_rows": 39873,
+  "holdout_rows": 85443,
+  "holdout_frauds": 108,
+  "holdout_fraud_rate": 0.001264,
+  "default_alert_rate": 0.005,
+  "models": {
+    "isolation_forest": {
+      "pr_auc": 0.0269,
+      "by_alert_rate": {
+        "0.002": {
+          "alert_rate_actual": 0.00169,
+          "precision": 0.0,
+          "recall": 0.0,
+          "threshold": 0.6555918493029124
+        },
+        "0.005": {
+          "alert_rate_actual": 0.00399,
+          "precision": 0.0176,
+          "recall": 0.0556,
+          "threshold": 0.6289866463798148
+        },
+        "0.01": {
+          "alert_rate_actual": 0.0085,
+          "precision": 0.0344,
+          "recall": 0.2315,
+          "threshold": 0.6033937635559751
+        }
+      },
+      "thresholds": {
+        "0.002": 0.6555918493029124,
+        "0.005": 0.6289866463798148,
+        "0.01": 0.6033937635559751
+      }
+    },
+    "logistic_regression": {
+      "pr_auc": 0.7715,
+      "by_alert_rate": {
+        "0.002": {
+          "alert_rate_actual": 0.00238,
+          "precision": 0.4384,
+          "recall": 0.8241,
+          "threshold": 0.9871262657856976
+        },
+        "0.005": {
+          "alert_rate_actual": 0.00529,
+          "precision": 0.2058,
+          "recall": 0.8611,
+          "threshold": 0.9426049919793854
+        },
+        "0.01": {
+          "alert_rate_actual": 0.01084,
+          "precision": 0.1015,
+          "recall": 0.8704,
+          "threshold": 0.8706261466076778
+        }
+      },
+      "thresholds": {
+        "0.002": 0.9871262657856976,
+        "0.005": 0.9426049919793854,
+        "0.01": 0.8706261466076778
+      },
+      "top_coefficients": [
+        {
+          "feature": "Amount",
+          "coefficient": 1.5319
+        },
+        {
+          "feature": "V4",
+          "coefficient": 1.089
+        },
+        {
+          "feature": "V14",
+          "coefficient": -1.0884
+        },
+        {
+          "feature": "V12",
+          "coefficient": -1.0714
+        },
+        {
+          "feature": "V2",
+          "coefficient": 0.7942
+        }
+      ]
+    },
+    "gradient_boosting": {
+      "pr_auc": 0.1846,
+      "by_alert_rate": {
+        "0.002": {
+          "alert_rate_actual": 0.00295,
+          "precision": 0.2778,
+          "recall": 0.6481,
+          "threshold": 1.0
+        },
+        "0.005": {
+          "alert_rate_actual": 0.00482,
+          "precision": 0.1723,
+          "recall": 0.6574,
+          "threshold": 0.07921724717135217
+        },
+        "0.01": {
+          "alert_rate_actual": 0.01211,
+          "precision": 0.0686,
+          "recall": 0.6574,
+          "threshold": 0.03301969625419186
+        }
+      },
+      "thresholds": {
+        "0.002": 1.0,
+        "0.005": 0.07921724717135217,
+        "0.01": 0.03301969625419186
+      }
+    }
+  }
+}
