@@ -1,5 +1,7 @@
 """Tests for the /predict endpoint and its request validation."""
 
+import json
+
 import pytest
 
 from app.main import app
@@ -64,3 +66,31 @@ def test_all_errors_reported_together():
     with pytest.raises(ValidationError) as exc:
         validate_payload({"temperature_c": "hot"})
     assert set(exc.value.errors) == {"temperature_c", "fan_rpm", "power_w"}
+
+
+def test_each_request_gets_request_id_header(client):
+    resp = client.post("/predict", json=VALID)
+    assert len(resp.headers["X-Request-ID"]) == 32
+
+
+def test_successful_request_emits_json_log(client, capsys):
+    client.post("/predict", json=VALID)
+    lines = [json.loads(line) for line in capsys.readouterr().out.splitlines() if line.strip()]
+    completed = [entry for entry in lines if entry["message"] == "request completed"]
+    assert completed, "expected a 'request completed' log line"
+    entry = completed[-1]
+    assert entry["path"] == "/predict"
+    assert entry["method"] == "POST"
+    assert entry["status"] == 200
+    assert isinstance(entry["latency_ms"], float)
+    assert entry["request_id"]
+    assert any(line["message"] == "prediction made" and "anomaly" in line for line in lines)
+
+
+def test_validation_failure_is_logged_as_warning(client, capsys):
+    client.post("/predict", json={"temperature_c": 45})
+    lines = [json.loads(line) for line in capsys.readouterr().out.splitlines() if line.strip()]
+    warnings = [entry for entry in lines if entry["message"] == "validation failed"]
+    assert warnings
+    assert warnings[-1]["level"] == "WARNING"
+    assert "power_w" in warnings[-1]["error_details"]
