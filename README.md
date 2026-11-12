@@ -122,15 +122,3 @@ tests/      Unit and API tests
 load/       Load test script and instructions
 .github/    CI/CD workflow
 ```
-
-## Roadmap
-
-- [x] Train and compare models (Isolation Forest tried and dropped; see above)
-- [x] `/predict` endpoint
-- [x] Request validation
-- [x] Structured logging
-- [x] Unit and API tests
-- [x] Dockerfile
-- [x] GitHub Actions: tests, Docker smoke test, and deploy on every push to `main`
-- [x] Deploy to Google Cloud Run
-- [x] Load test with p50 / p95 latency results
