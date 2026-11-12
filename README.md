@@ -18,7 +18,13 @@ load/       Load test script and recorded results
 
 ## Data
 
-The model is trained on synthetic sensor-style readings (temperature, fan speed, power draw) generated in code. No real or proprietary data is used.
+The model is trained on the Credit Card Fraud Detection dataset on Kaggle, collected by the Machine Learning Group at ULB (Université Libre de Bruxelles) in a research collaboration with Worldline. It has 284,807 transactions, of which 492 (0.17%) are fraud. The features V1–V28 are anonymized principal components, and the only other raw fields are `Time` and `Amount`. The dataset's license is the [Database Contents License (DbCL) 1.0](http://opendatacommons.org/licenses/dbcl/1.0/). The data is not committed to this repository; download it to `data/creditcard.csv` to retrain.
+
+Citation, as requested by the dataset authors:
+
+> Andrea Dal Pozzolo, Olivier Caelen, Reid A. Johnson and Gianluca Bontempi. *Calibrating Probability with Undersampling for Unbalanced Classification.* Symposium on Computational Intelligence and Data Mining (CIDM), IEEE, 2015.
+
+The Kaggle page lists further papers from the same group. Because the features are anonymized and the data is from 2013, the results here do not show how the models would perform on current transactions.
 
 ## Alternatives checked
 
