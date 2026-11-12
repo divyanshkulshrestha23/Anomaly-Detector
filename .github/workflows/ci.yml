@@ -21,9 +21,33 @@ jobs:
       - name: Run tests
         run: python -m pytest -q
 
-  deploy:
-    # Only deploy pushes to main, and only after tests pass.
+  docker:
+    # Build the image and smoke-test it: the container must answer /predict.
     needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t anomaly-detector:ci .
+
+      - name: Smoke test container
+        run: |
+          docker run -d --name app -p 8080:8080 anomaly-detector:ci
+          for i in $(seq 1 30); do
+            if curl -sf -X POST localhost:8080/predict \
+                 -H 'Content-Type: application/json' \
+                 -d '{"temperature_c":45,"fan_rpm":3000,"power_w":250}'; then
+              echo; exit 0
+            fi
+            sleep 1
+          done
+          docker logs app
+          exit 1
+
+  deploy:
+    # Only deploy pushes to main, and only after tests and the image build pass.
+    needs: [test, docker]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
