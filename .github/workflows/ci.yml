@@ -20,3 +20,35 @@ jobs:
 
       - name: Run tests
         run: python -m pytest -q
+
+  deploy:
+    # Only deploy pushes to main, and only after tests pass.
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # lets GitHub issue an OIDC token for Workload Identity Federation
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+
+      - name: Deploy to Cloud Run
+        # Builds the Dockerfile with Cloud Build and deploys the image.
+        run: |
+          gcloud run deploy anomaly-detector \
+            --source . \
+            --region "${{ vars.GCP_REGION }}" \
+            --allow-unauthenticated \
+            --quiet
