@@ -75,5 +75,5 @@ jobs:
           gcloud run deploy anomaly-detector \
             --source . \
             --region "${{ vars.GCP_REGION }}" \
-            --allow-unauthenticated \
+            --no-allow-unauthenticated \
             --quiet
