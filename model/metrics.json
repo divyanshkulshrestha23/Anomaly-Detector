@@ -6,34 +6,6 @@
   "holdout_fraud_rate": 0.001264,
   "default_alert_rate": 0.005,
   "models": {
-    "isolation_forest": {
-      "pr_auc": 0.0269,
-      "by_alert_rate": {
-        "0.002": {
-          "alert_rate_actual": 0.00169,
-          "precision": 0.0,
-          "recall": 0.0,
-          "threshold": 0.6555918493029124
-        },
-        "0.005": {
-          "alert_rate_actual": 0.00399,
-          "precision": 0.0176,
-          "recall": 0.0556,
-          "threshold": 0.6289866463798148
-        },
-        "0.01": {
-          "alert_rate_actual": 0.0085,
-          "precision": 0.0344,
-          "recall": 0.2315,
-          "threshold": 0.6033937635559751
-        }
-      },
-      "thresholds": {
-        "0.002": 0.6555918493029124,
-        "0.005": 0.6289866463798148,
-        "0.01": 0.6033937635559751
-      }
-    },
     "logistic_regression": {
       "pr_auc": 0.7715,
       "by_alert_rate": {

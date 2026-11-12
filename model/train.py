@@ -1,9 +1,11 @@
 """Train and compare fraud detectors on the credit card dataset.
 
 Models:
-    isolation_forest      unsupervised anomaly detector (learns normal transactions only)
     logistic_regression   supervised baseline; coefficients show which features push toward fraud
-    gradient_boosting     supervised model; usually the strongest of the three
+    gradient_boosting     supervised model; tried as a stronger alternative, but lower holdout PR-AUC here
+
+Isolation Forest was also tried (unsupervised, fit on normal transactions only) and
+dropped: its holdout PR-AUC was far below the supervised models. See README.
 
 Expects the dataset at data/creditcard.csv (not committed; see README).
 Run from the repository root:
@@ -26,7 +28,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import HistGradientBoostingClassifier, IsolationForest
+from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score, precision_score, recall_score
 from sklearn.pipeline import make_pipeline
@@ -54,18 +56,6 @@ def load_splits() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     train, holdout = df.iloc[:train_cut], df.iloc[train_cut:]
     fit_cut = int(len(train) * FIT_FRACTION_OF_TRAIN)
     return train.iloc[:fit_cut], train.iloc[fit_cut:], holdout
-
-
-def fit_isolation_forest(fit: pd.DataFrame):
-    """Fit on normal transactions only. Higher anomaly score means more suspicious."""
-    normal = fit[fit[LABEL] == 0]
-    model = IsolationForest(n_estimators=200, contamination="auto", random_state=SEED)
-    model.fit(normal[FEATURES])
-
-    def score(X: pd.DataFrame) -> np.ndarray:
-        return -model.score_samples(X)  # score_samples is higher for normal points
-
-    return score, model
 
 
 def fit_logistic_regression(fit: pd.DataFrame):
@@ -127,7 +117,6 @@ def main() -> None:
     fit, validation, holdout = load_splits()
 
     builders = {
-        "isolation_forest": fit_isolation_forest,
         "logistic_regression": fit_logistic_regression,
         "gradient_boosting": fit_gradient_boosting,
     }

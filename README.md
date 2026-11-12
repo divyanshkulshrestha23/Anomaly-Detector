@@ -20,9 +20,13 @@ load/       Load test script and recorded results
 
 The model is trained on synthetic sensor-style readings (temperature, fan speed, power draw) generated in code. No real or proprietary data is used.
 
+## Alternatives checked
+
+**Isolation Forest** (unsupervised, fit on normal transactions only) was tried and dropped. On the holdout set it reached a PR-AUC of 0.0269, against 0.7715 for logistic regression. At the 0.5% alert rate it had precision 0.0176 and recall 0.0556. Its anomaly scores separated fraud from normal transactions poorly on this dataset, so it is not in the serving path.
+
 ## Roadmap
 
-- [ ] Train and save anomaly model (Isolation Forest)
+- [x] Train and compare models (Isolation Forest tried and dropped; see above)
 - [ ] `/predict` endpoint
 - [ ] Request validation
 - [ ] Structured logging
