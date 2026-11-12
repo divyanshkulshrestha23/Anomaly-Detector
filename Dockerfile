@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Application code and the trained model artifact.
 COPY app/ app/
-COPY model/anomaly_model.joblib model/anomaly_model.joblib
+COPY model/logistic_regression.joblib model/logistic_regression.joblib
 
 # Run as a non-root user.
 RUN useradd --create-home appuser

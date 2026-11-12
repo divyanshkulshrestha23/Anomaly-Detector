@@ -33,11 +33,12 @@ jobs:
 
       - name: Smoke test container
         run: |
+          PAYLOAD=$(python -c 'import json; print(json.dumps({"Time": 50000, "Amount": 15, **{f"V{i}": 0 for i in range(1, 29)}}))')
           docker run -d --name app -p 8080:8080 anomaly-detector:ci
           for i in $(seq 1 30); do
             if curl -sf -X POST localhost:8080/predict \
                  -H 'Content-Type: application/json' \
-                 -d '{"temperature_c":45,"fan_rpm":3000,"power_w":250}'; then
+                 -d "$PAYLOAD"; then
               echo; exit 0
             fi
             sleep 1

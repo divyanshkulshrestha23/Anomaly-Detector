@@ -2,7 +2,8 @@
 
 import math
 
-FEATURES = ("temperature_c", "fan_rpm", "power_w")
+# Must match the feature order the model was trained with (model/train.py).
+FEATURES = ("Time", "Amount") + tuple(f"V{i}" for i in range(1, 29))
 
 
 class ValidationError(ValueError):
