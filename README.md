@@ -103,16 +103,6 @@ docker build -t credit-card-fraud-api .
 docker run -p 8080:8080 credit-card-fraud-api
 ```
 
-## Limitations
-
-- **Old and anonymized data.** The transactions are from 2013 and most features are anonymized principal components, so the model can't be expected to match current fraud patterns. V1–V28 have no published meaning in this dataset, so `top_features` names them but can't explain them in business terms.
-- **Few frauds.** The dataset has 492 frauds, and the holdout has 108. Precision and recall at each threshold move a lot with a few transactions, so the numbers are rough estimates.
-- **One split.** Results come from a single time-based split and are not averaged over several splits.
-- **Score is not calibrated.** Balanced class weights inflate the scores, so the score can't be read as a fraud probability.
-- **No drift monitoring.** The service doesn't check whether incoming transactions still look like the training data.
-- **No authentication.** The Cloud Run service is public, so anyone with the URL can call it. Fine for a demo, not for production traffic.
-- **Latency from one location.** The load test ran from one home network. Results from other locations will differ.
-
 ## Project layout
 
 ```
